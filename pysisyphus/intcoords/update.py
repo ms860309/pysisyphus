@@ -93,6 +93,7 @@ def transform_int_step(
     check_dihedrals=False,
     cart_rms_thresh=1e-6,
     logger=None,
+    nHcap = 12
 ):
     """Transformation is done in primitive internals, so int_step must be given
     in primitive internals and not in DLC!"""
@@ -110,6 +111,8 @@ def transform_int_step(
     backtransform_failed = True
     for i in range(25):
         cart_step = Bt_inv_prim.T.dot(remaining_int_step)
+        if nHcap != 0:
+            cart_step[-(nHcap * 3):] = 0
         cart_rms = np.sqrt(np.mean(cart_step ** 2))
         # Update cartesian coordinates
         new_cart_coords += cart_step
